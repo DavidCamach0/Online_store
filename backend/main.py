@@ -18,6 +18,10 @@ def current_user(user = Depends(verify_token)):
         raise HTTPException(status_code=400, detail="Aun no ha Iniciado Sesion")
    return user
 
+@app.get("/")
+def read_root():
+   return {"message":"API activa"}
+
 @app.post("/Register")
 async def Register(user:User):
     try:
