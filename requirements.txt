@@ -95,7 +95,7 @@ pycups==2.0.1
 pycurl==7.44.1
 pydantic==2.10.6
 pydantic-extra-types==2.10.2
-pydantic-settings==2.7.1
+pydantic-settings==2.7.1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
 pydantic_core==2.27.2
 pyelftools==0.27
 Pygments==2.19.1
