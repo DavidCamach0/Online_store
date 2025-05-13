@@ -10,8 +10,11 @@ load_dotenv()
 def get_cursor():
 
     
-    conn = psycopg2.connect(user=os.getenv("USER_DB"),password=os.getenv("PASSWORD_DB"),host=os.getenv("HOST_DB"),
-                            database=os.getenv("NAME_DB"),port=os.getenv("PORT_DB"))
+    conn = psycopg2.connect(user=os.getenv("USER_DB"),
+                            password=os.getenv("PASSWORD_DB"),
+                            host=os.getenv("HOST_DB"),
+                            database=os.getenv("NAME_DB"),
+                            port=os.getenv("PORT_DB"))
     
     try:
      
