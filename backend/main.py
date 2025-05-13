@@ -1,11 +1,13 @@
-from fastapi import FastAPI,HTTPException,Depends
-from fastapi.security import OAuth2PasswordRequestForm
-from models import User, User_delete,User_update
-from db import get_cursor
-from utils import password_hash,verify_password
-from auth import create_token,verify_token
 
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from backend.models import User, User_delete, User_update
+from backend.db import get_cursor
+from backend.utils import password_hash, verify_password
+from backend.auth import create_token, verify_token
 from fastapi.middleware.cors import CORSMiddleware
+
+
 
 app = FastAPI()
 
