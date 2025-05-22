@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-DATABASE_URL =os.getenv("DATABASE_URL")
+DATABASE_URL =os.getenv("DATABASE_URL_LOCAL")
 @contextmanager
 def get_cursor():
 
@@ -14,7 +14,7 @@ def get_cursor():
     
     try:
      
-        print("conexion Exitosa")
+        
 
         cursor = conn.cursor(cursor_factory=RealDictCursor)
 
@@ -31,14 +31,13 @@ def get_cursor():
         if conn:
             conn.close()
 
-'''def probar():
-
-    with get_cursor() as cursor:
-
-        cursor.execute("SELECT * FROM usuarios")
-        result = cursor.fetchall()
-
-    print(result)    
-
-
-probar()'''
+def get_connection():
+    
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        conn.commit()
+        return conn
+        
+    except Exception as e:
+        conn.rollback()
+        raise e

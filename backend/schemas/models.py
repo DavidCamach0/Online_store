@@ -4,20 +4,20 @@ import re
 
 
 
-class User(BaseModel):
+class UserCreate(BaseModel):
 
     fullname:str
     username:str
     age:int
     email: EmailStr
     password: str
-
+    role :Optional[str]  = "user"
 
 
     @field_validator('username')
     def validate_username(cls, value):
-        # Solo letras, números y guion bajo, de 3 a 30 caracteres
-        if not re.fullmatch(r'^[a-zA-Z0-9_]{3,30}$', value):
+        # Solo letras, números y guion bajo, de 5 a 30 caracteres
+        if not re.fullmatch(r'^[a-zA-Z0-9_]{5,30}$', value):
             raise ValueError('El nombre de usuario solo puede contener letras, números y guion bajo, y debe tener entre 3 y 30 caracteres.')
         if value.lower() in {'admin', 'root', 'superuser'}:
             raise ValueError('Este nombre de usuario está reservado.')
@@ -44,11 +44,16 @@ class User(BaseModel):
         return value
     @field_validator('fullname')
     def validate_fullname(cls,value):
-        if not re.search(r'^[a-zA-ZÁÉÍÓÚáéíóúñüÜ\s]{3,60}$',value):
+        if not re.search(r'^[a-zA-ZÁÉÍÓÚáéíóúñüÜ\s]{5,60}$',value):
             raise ValueError('solo se admiten letras y espacios')
         return value
 
-class User_update(BaseModel):
+class UserLogin(BaseModel):
+    username: str
+    password:str
+
+
+class UserUpdate(BaseModel):
 
     fullname:Optional[str] = None
     username:Optional[str]= None
@@ -61,8 +66,8 @@ class User_update(BaseModel):
 
     @field_validator('username')
     def validate_username(cls, value):
-        # Solo letras, números y guion bajo, de 3 a 30 caracteres
-        if not re.fullmatch(r'^[a-zA-Z0-9_]{3,30}$', value):
+        # Solo letras, números y guion bajo, de 5 a 30 caracteres
+        if not re.fullmatch(r'^[a-zA-Z0-9_]{5,30}$', value):
             raise ValueError('El nombre de usuario solo puede contener letras, números y guion bajo, y debe tener entre 3 y 30 caracteres.')
         if value.lower() in {'admin', 'root', 'superuser'}:
             raise ValueError('Este nombre de usuario está reservado.')
@@ -94,6 +99,6 @@ class User_update(BaseModel):
         return value
 
 
-class User_delete(BaseModel):
+class UserDelete(BaseModel):
     
     password:str

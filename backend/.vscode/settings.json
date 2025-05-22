@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": ["./backend"],
+    "python.autoComplete.extraPaths": ["./backend"],
+    "python.defaultInterpreterPath": ".venv/bin/python"
+  }
+  
