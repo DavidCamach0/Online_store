@@ -1,3 +1,4 @@
+#Escritorio/GIT/backend/schemas/models.py
 from pydantic import BaseModel,EmailStr, field_validator
 from typing import Optional
 import re
@@ -12,7 +13,7 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
     role :Optional[str]  = "user"
-
+   
 
     @field_validator('username')
     def validate_username(cls, value):
@@ -102,3 +103,12 @@ class UserUpdate(BaseModel):
 class UserDelete(BaseModel):
     
     password:str
+
+
+class Product(BaseModel):
+    
+    name:Optional[str]= None
+    price:Optional[float]= None
+    stock:Optional[int]= None
+    description:Optional[str]= None
+    category:Optional[str]= None

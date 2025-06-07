@@ -1,4 +1,4 @@
-# backend/middleware/logger_middleware.py
+# /Escritorio/GIT/backend/middleware/logger_middleware.py
 
 import time
 from starlette.middleware.base import BaseHTTPMiddleware

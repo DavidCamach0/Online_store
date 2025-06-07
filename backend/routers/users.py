@@ -1,33 +1,24 @@
-from fastapi import APIRouter, HTTPException, Depends,status,Request
+#/Escritorio/GIT/backend/routers/users.py
+
+from fastapi import APIRouter, HTTPException, Depends,status,Request,Query
 from fastapi.security import OAuth2PasswordRequestForm
 from backend.schemas.models import UserCreate, UserDelete, UserUpdate
-from backend.utils.utils import hash_password, verify_password
-from backend.utils.auth import create_token, verify_token
+from backend.utils.auth import create_token,current_user,create_guest
 from backend.service.user_service import UserService
 from backend.utils.logger import get_logger
-
+from backend.repositories.user_repository_postgres import UserRepositoryPostgres
+from backend.service.user_service import UserService
 
 
 router = APIRouter( prefix="/user",
     tags=["user"]   )
 
-user_service = UserService()
 
 logger = get_logger(__name__)
 
-def current_user(user = Depends(verify_token)):
-   
-   if not user or user == None:
-        raise HTTPException(status_code=400, detail="Aun no ha Iniciado Sesion")
-   
-   return user
+user_repo = UserRepositoryPostgres()
+user_service = UserService(user_repo)
 
-def require_role(roles: list[str]):
-    def _require_role(user = Depends(current_user)):
-        if user.get("role") not in roles:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acceso denegado")
-        return user
-    return _require_role
 
 
 @router.post("/Register")
@@ -35,13 +26,22 @@ async def Register(request:Request,user: UserCreate):
     try:
         new_user = user_service.register_user(request,user)
         
-        return {"message": "Usuario registrado correctamente", "user": new_user}
+        return {"message": "Usuario registrado correctamente", "user": new_user[0],"token":new_user[1]}
     except HTTPException as e:
         raise e
     except Exception as e:
         logger.error("Error al Registar Usuario {}".format(e))        
         raise  HTTPException(status_code=500, detail="Error interno del servidor")
     
+@router.get("/confirmar-email")
+def confirmar_email(request:Request,token: str = Query(...)):
+     
+     try:
+          user_service.email_confirm(request,token)
+          return {"correo":"confirmado"} 
+     except Exception as e:
+         logger.error(e)
+         raise HTTPException(status_code=500, detail=e)
 
 @router.post("/login")   
 async def login(request:Request,user: OAuth2PasswordRequestForm = Depends() ):
@@ -50,11 +50,11 @@ async def login(request:Request,user: OAuth2PasswordRequestForm = Depends() ):
 
         user_db = user_service.login_user(user,request)
         
-        token = create_token({"sub":user_db["username"],"role":user_db["role"]})
+        token = create_token({"sub":user_db["username"]})
         
         return {"message":"Inision de sesion Exitosa",
-                "username":user_db["username"],
-                "role":user_db["role"],"token":token} 
+                "username":user_db["username"],"token":token} 
+   
    except HTTPException as e:
         raise e
    except Exception as e:     
@@ -68,6 +68,7 @@ async def me(user: dict = Depends(current_user)):
         profile = user_service.get_profile(user)
         return {"Mi Perfil":profile}
    except HTTPException as e:
+        
         raise e
    except Exception as e:     
         logger.error("Error al Mostrar Perfil {}".format(e))      

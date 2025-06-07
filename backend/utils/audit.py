@@ -1,6 +1,6 @@
-# backend/utils/auditoria.py
+# /Escritorio/GIT/backend/utils/audit.py
 
-from backend.db.db import get_cursor
+from backend.core.database import get_cursor
 from fastapi import Request
 import datetime
 from typing import Optional
@@ -19,7 +19,7 @@ def registrar_auditoria(
         endpoint = request.url.path
         metodo = request.method
         ip = request.client.host
-        user_agent = str(request.headers.get("user-ugent","Desconocido"))
+        user_agent = str(request.headers.get("user-agent","Desconocido"))
         with get_cursor() as cursor:
             cursor.execute(
                 """
