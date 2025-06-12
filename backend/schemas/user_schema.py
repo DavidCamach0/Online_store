@@ -105,10 +105,3 @@ class UserDelete(BaseModel):
     password:str
 
 
-class Product(BaseModel):
-    
-    name:Optional[str]= None
-    price:Optional[float]= None
-    stock:Optional[int]= None
-    description:Optional[str]= None
-    category:Optional[str]= None

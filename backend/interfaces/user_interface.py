@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from fastapi import Request
-from backend.schemas.models import UserCreate, UserLogin, UserUpdate, UserDelete
+from backend.schemas.user_schema import UserCreate, UserLogin, UserUpdate, UserDelete
 
 class IUserService(ABC):
 

@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, HTTPException, Depends,status,Request,Query
 from fastapi.security import OAuth2PasswordRequestForm
-from backend.schemas.models import UserCreate, UserDelete, UserUpdate
+from backend.schemas.user_schema import UserCreate, UserDelete, UserUpdate
 from backend.utils.auth import create_token,current_user,create_guest
 from backend.service.user_service import UserService
 from backend.utils.logger import get_logger

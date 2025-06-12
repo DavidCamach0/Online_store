@@ -1,4 +1,4 @@
-# Escritorio/GIT/backend/db/db.py
+# Escritorio/GIT/backend/core/database.py
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from contextlib import contextmanager
@@ -22,23 +22,26 @@ def get_cursor():
         yield cursor
 
         conn.commit()
-    except Exception as E:
+    except Exception as e:
         if conn:
             conn.rollback()
-        raise E 
+        raise e 
     finally:
         if cursor: 
             cursor.close()
         if conn:
             conn.close()
 
+@contextmanager
 def get_connection():
-    
+    conn = None
     try:
         conn = psycopg2.connect(DATABASE_URL)
-        conn.commit()
-        return conn
-        
+        yield conn  # devolvés la conexión para ser usada afuera
     except Exception as e:
-        conn.rollback()
+        if conn:
+            conn.rollback()
         raise e
+    finally:
+        if conn:
+            conn.close()

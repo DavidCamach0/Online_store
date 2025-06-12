@@ -6,7 +6,7 @@ from backend.core.database import get_cursor,get_connection
 from fastapi import HTTPException, status,Depends,Request
 from psycopg2 import IntegrityError
 from backend.utils.hash import hash_password, verify_password
-from backend.schemas.models import UserCreate, UserLogin,UserDelete,UserUpdate
+from backend.schemas.user_schema import UserCreate, UserLogin,UserDelete,UserUpdate
 from backend.utils.logger import get_logger
 from backend.utils.audit import registrar_auditoria
 
@@ -44,7 +44,7 @@ class UserService(IUserService):
             
         except IntegrityError as e:
             error_message = str(e)
-           
+            print(e,type(e))
 
             if "usuarios_username_key" in error_message:
                 raise HTTPException(status_code=400, detail="El nombre de usuario ya está en uso")

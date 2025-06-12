@@ -1,6 +1,6 @@
 # interfaces/user_repository_interface.py
 from abc import ABC, abstractmethod
-from backend.schemas.models import UserCreate, UserLogin,UserDelete
+from backend.schemas.user_schema import UserCreate, UserLogin,UserDelete
 
 class IUserRepository(ABC):
 

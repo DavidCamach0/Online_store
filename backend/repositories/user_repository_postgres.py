@@ -14,7 +14,7 @@ class UserRepositoryPostgres(IUserRepository):
 
             cursor.execute(
                 """
-                INSERT INTO usuarios (fullname, username, email, age, password, role, state, registration_date)
+                INSERT INTO users (fullname, username, email, age, password, role, state, registration_date)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id, username, email
                 """,
@@ -38,14 +38,14 @@ class UserRepositoryPostgres(IUserRepository):
     def get_user_by_email(self, email):
         with get_cursor() as cursor:
             
-            cursor.execute("""UPDATE usuarios SET state = 'confirmado' WHERE email = %s 
+            cursor.execute("""UPDATE users SET state = 'confirmado' WHERE email = %s 
                            RETURNING id, username, email""", (email,))
             user = cursor.fetchone()
             return user
 
     def login_user(self, user_data):
         with get_cursor() as cursor:
-            cursor.execute("SELECT id, username, password,role FROM usuarios WHERE username = %s", (user_data.username,))
+            cursor.execute("SELECT id, username, password,role FROM users WHERE username = %s", (user_data.username,))
             user = cursor.fetchone()
             return user
         
@@ -55,14 +55,14 @@ class UserRepositoryPostgres(IUserRepository):
          with get_cursor() as cursor:
             
             cursor.execute(
-                    "SELECT fullname, username, age, email, role FROM usuarios WHERE username = %s", (user["username"],)
+                    "SELECT fullname, username, age, email, role FROM users WHERE username = %s", (user["username"],)
                 )
             user = cursor.fetchone()
          return user  
     
     def get_user_by_username(self,username) -> dict | None:
         with get_cursor() as cursor:
-            cursor.execute("SELECT id, password FROM usuarios WHERE username = %s", (username["username"],))
+            cursor.execute("SELECT id, password FROM users WHERE username = %s", (username["username"],))
             return cursor.fetchone()
         
 
@@ -74,12 +74,12 @@ class UserRepositoryPostgres(IUserRepository):
             set_sql = ", ".join([f"{col} = %s" for col in columnas])
             valores.append(user_id)
 
-            query = f"UPDATE usuarios SET {set_sql} WHERE id = %s"
+            query = f"UPDATE users SET {set_sql} WHERE id = %s"
             cursor.execute(query, valores)
  
     def delete_user(self,id:int):
         with get_cursor() as cursor:
-            cursor.execute("DELETE FROM usuarios WHERE id =%s",(id,))
+            cursor.execute("DELETE FROM users WHERE id =%s",(id,))
 
         
 

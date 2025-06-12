@@ -73,7 +73,7 @@ def verify_token(token = Depends(auth)):
 
         # Buscar usuario en la base de datos
         with get_cursor() as cursor:
-            cursor.execute("SELECT id, username, role FROM usuarios WHERE username = %s", (username,))
+            cursor.execute("SELECT id, username, role FROM users WHERE username = %s", (username,))
             user = cursor.fetchone()
 
         if not user:
